@@ -1,205 +1,346 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>PeleasDeGallosTuNorte.com | Dominio en Venta</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>peleasdegallostunorte.com</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        /* ==========================================================================
+           ESTILOS BASE
+           ========================================================================== */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
 
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+        /* ==========================================================================
+           VISTA 1: PÁGINA DE ERROR (ESTILO CHROMIUM)
+           ========================================================================== */
+        #error-view {
+            background-color: #202124;
+            color: #e8eaed;
+            font-family: "Segoe UI", Tahoma, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
 
-<style>
-*{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
-    font-family:'Inter',sans-serif;
-}
+        .interstitial-wrapper {
+            max-width: 600px;
+            width: 100%;
+            padding-bottom: 80px;
+        }
 
-body{
-    background:#0f0f0f;
-    color:white;
-    overflow-x:hidden;
-}
+        .icon {
+            display: block;
+            height: 40px; 
+            width: 40px;  
+            margin-bottom: 32px; 
+            opacity: 0.75; 
+            object-fit: contain;
+        }
 
-.hero{
-    min-height:100vh;
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    padding:40px;
-    background:
-    linear-gradient(rgba(0,0,0,.70),rgba(0,0,0,.80)),
-    url('https://images.unsplash.com/photo-1517849845537-4d257902454a?q=80&w=2070');
-    background-size:cover;
-    background-position:center;
-}
+        .icon-generic {
+            content: url("https://i.postimg.cc/ZvxcWpXQ/image.png");
+        }
 
-.container{
-    max-width:1100px;
-    text-align:center;
-}
+        #main-message h1 {
+            font-size: 22px;
+            font-weight: 500;
+            margin-bottom: 24px;
+            color: #e8eaed;
+        }
 
-.badge{
-    display:inline-block;
-    background:rgba(255,255,255,.08);
-    border:1px solid rgba(255,255,255,.15);
-    padding:10px 20px;
-    border-radius:50px;
-    margin-bottom:25px;
-    backdrop-filter:blur(10px);
-}
+        #main-message p, .single-suggestion li {
+            font-size: 14px;
+            line-height: 22px;
+            color: #9aa0a6;
+            margin-bottom: 16px;
+            list-style-type: none;
+        }
 
-h1{
-    font-size:clamp(45px,7vw,85px);
-    font-weight:800;
-    line-height:1;
-    margin-bottom:25px;
-}
+        #main-message p span {
+            color: #e8eaed;
+        }
 
-.domain{
-    color:#d6a75f;
-}
+        #diagnose-link {
+            color: #8ab4f8;
+            text-decoration: none;
+        }
 
-p{
-    color:#cfcfcf;
-    font-size:20px;
-    line-height:1.8;
-    max-width:850px;
-    margin:auto;
-}
+        #diagnose-link:hover {
+            text-decoration: underline;
+        }
 
-.features{
-    display:grid;
-    grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
-    gap:25px;
-    margin-top:70px;
-}
+        .error-code {
+            font-size: 11px;
+            color: #9aa0a6;
+            margin-top: 28px;
+            text-transform: uppercase;
+        }
 
-.card{
-    background:rgba(255,255,255,.05);
-    border:1px solid rgba(255,255,255,.08);
-    padding:35px;
-    border-radius:25px;
-    backdrop-filter:blur(15px);
-    transition:.3s;
-}
+        .nav-wrapper {
+            margin-top: 40px;
+        }
 
-.card:hover{
-    transform:translateY(-8px);
-}
+        .blue-button {
+            background-color: #8ab4f8;
+            color: #202124;
+            font-size: 14px;
+            font-weight: 500;
+            padding: 10px 24px;
+            border: none;
+            border-radius: 100px;
+            cursor: pointer;
+            transition: background-color 0.1s;
+        }
 
-.card h3{
-    margin-bottom:15px;
-    color:#fff;
-}
+        .blue-button:hover {
+            background-color: #93baf9;
+        }
 
-.card p{
-    font-size:16px;
-}
+        .blue-button:active {
+            background-color: #abc7f9;
+        }
 
-.btn{
-    margin-top:55px;
-    padding:18px 45px;
-    border:none;
-    border-radius:14px;
-    background:#d6a75f;
-    color:#111;
-    font-size:18px;
-    font-weight:700;
-    cursor:pointer;
-    transition:.3s;
-}
+        /* ==========================================================================
+           VISTA 2: LANDING PAGE DOMINIO EN VENTA
+           ========================================================================== */
+        #landing-view {
+            display: none; /* Oculta por defecto */
+            background: #0f0f0f;
+            color: white;
+            font-family: 'Inter', sans-serif;
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
 
-.btn:hover{
-    transform:scale(1.05);
-}
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 40px;
+            background: linear-gradient(rgba(0,0,0,.70),rgba(0,0,0,.80)),
+                        url('https://images.unsplash.com/photo-1517849845537-4d257902454a?q=80&w=2070');
+            background-size: cover;
+            background-position:center;
+        }
 
-.message{
-    margin-top:25px;
-    color:#d6a75f;
-    display:none;
-    font-size:17px;
-}
+        .container {
+            max-width: 1100px;
+            text-align: center;
+        }
 
-footer{
-    text-align:center;
-    padding:35px;
-    color:#777;
-    background:#090909;
-}
+        .badge {
+            display: inline-block;
+            background: rgba(255,255,255,.08);
+            border: 1px solid rgba(255,255,255,.15);
+            padding: 10px 20px;
+            border-radius: 50px;
+            margin-bottom: 25px;
+            backdrop-filter: blur(10px);
+        }
 
-@media(max-width:768px){
-    p{
-        font-size:18px;
-    }
-}
-</style>
+        h2 {
+            font-size: clamp(45px,7vw,85px);
+            font-weight: 800;
+            line-height: 1;
+            margin-bottom: 25px;
+        }
+
+        .domain {
+            color: #d6a75f;
+        }
+
+        .landing-p {
+            color: #cfcfcf;
+            font-size: 20px;
+            line-height: 1.8;
+            max-width: 850px;
+            margin: auto;
+        }
+
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit,minmax(250px,1fr));
+            gap: 25px;
+            margin-top: 70px;
+        }
+
+        .card {
+            background: rgba(255,255,255,.05);
+            border: 1px solid rgba(255,255,255,.08);
+            padding: 35px;
+            border-radius: 25px;
+            backdrop-filter: blur(15px);
+            transition: .3s;
+        }
+
+        .card:hover {
+            transform: translateY(-8px);
+        }
+
+        .card h3 {
+            margin-bottom: 15px;
+            color: #fff;
+        }
+
+        .card p {
+            font-size: 16px;
+            color: #cfcfcf;
+        }
+
+        .btn {
+            margin-top: 55px;
+            padding: 18px 45px;
+            border: none;
+            border-radius: 14px;
+            background: #d6a75f;
+            color: #111;
+            font-size: 18px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: .3s;
+        }
+
+        .btn:hover {
+            transform: scale(1.05);
+        }
+
+        .message {
+            margin-top: 25px;
+            color: #d6a75f;
+            display: none;
+            font-size: 17px;
+        }
+
+        footer {
+            text-align: center;
+            padding: 35px;
+            color: #777;
+            background: #090909;
+        }
+
+        @media(max-width:768px){
+            .landing-p {
+                font-size: 18px;
+            }
+        }
+    </style>
 </head>
 <body>
 
-<section class="hero">
-    <div class="container">
-
-        <div class="badge">
-            🌐 Dominio Premium Disponible
-        </div>
-
-        <h1>
-            <span class="domain">PeleasDeGallosTuNorte.com</span>
-        </h1>
-
-        <p>
-            Un dominio memorable y altamente orientado al mercado gallístico
-            dominicano. Ideal para transmisiones, noticias, comunidades,
-            eventos, resultados y cualquier proyecto relacionado con el mundo
-            de las peleas de gallos en la región norte del país.
-        </p>
-
-        <div class="features">
-
-            <div class="card">
-                <h3>Nombre Fácil de Recordar</h3>
-                <p>
-                    Dominio corto, directo y con excelente potencial de marca.
-                </p>
+    <!-- ==========================================================================
+         VISTA 1: ERROR DE RED DE CHROMIUM
+         ========================================================================== */ -->
+    <div id="error-view">
+        <div id="main-frame-error" class="interstitial-wrapper">
+            <div id="main-content">
+                <div class="icon icon-generic"></div>
+                
+                <div id="main-message">
+                    <h1><span>No se puede acceder a este sitio</span></h1>
+                    <p>Revisa que no haya errores de ortografía en <span>peleasdegallostunorte.com</span>.</p>
+                    
+                    <div id="suggestions-list">
+                        <ul class="single-suggestion">
+                            <li>Si no hay errores, <a href="#" id="diagnose-link" onclick="loadLanding(event)">prueba ejecutar el diagnóstico de red de Windows</a>.</li>
+                        </ul>
+                    </div>
+                    <div class="error-code">DNS_PROBE_FINISHED_NXDOMAIN</div>
+                </div>
             </div>
-
-            <div class="card">
-                <h3>Gran Potencial SEO</h3>
-                <p>
-                    Incluye palabras clave relevantes para búsquedas orgánicas.
-                </p>
+            
+            <div id="buttons" class="nav-wrapper suggested-left">
+                <div id="control-buttons">
+                    <!-- Redirección controlada por JS -->
+                    <button id="reload-button" class="blue-button text-button" onclick="loadLanding(event)">
+                        Volver a cargar
+                    </button>
+                </div>
             </div>
-
-            <div class="card">
-                <h3>Ideal para Negocios</h3>
-                <p>
-                    Perfecto para portales, streaming o proyectos comerciales.
-                </p>
-            </div>
-
         </div>
-
-        <button class="btn" onclick="showMessage()">
-            Solicitar Información
-        </button>
-
-        <div class="message" id="msg">
-            Gracias por su interés. El canal de contacto estará disponible próximamente.
-        </div>
-
     </div>
-</section>
 
-<footer>
-    © 2026 PeleasDeGallosTuNorte.com · Dominio disponible para adquisición.
-</footer>
+    <!-- ==========================================================================
+         VISTA 2: LANDING PAGE DOMINIO EN VENTA
+         ========================================================================== */ -->
+    <div id="landing-view">
+        <section class="hero">
+            <div class="container">
+                <div class="badge">🌐 Dominio Premium Disponible</div>
 
-<script>
-function showMessage(){
-    document.getElementById("msg").style.display = "block";
-}
-</script>
+                <h2><span class="domain">PeleasDeGallosTuNorte.com</span></h2>
+
+                <p class="landing-p">
+                    Tenemos disponible este valioso dominio premium, ideal para proyectos
+                    digitales, marcas, portales informativos, negocios en línea o cualquier
+                    iniciativa que busque una presencia sólida y fácil de recordar en internet.
+                    <br><br>
+                    Contamos con una amplia variedad de dominios relacionados con términos
+                    como <strong>Norte</strong>, <strong>Tu Norte</strong> y otras combinaciones
+                    estratégicas con gran potencial comercial y de posicionamiento.
+                    <br><br>
+                    Si estás interesado en adquirir este dominio o conocer otras opciones
+                    disponibles dentro de nuestro portafolio, te invitamos a solicitar más
+                    información y descubrir nuevas oportunidades para tu próximo proyecto digital.
+                </p>
+
+                <div class="features">
+                    <div class="card">
+                        <h3>Dominio Premium</h3>
+                        <p>Nombre memorable y con gran potencial para desarrollar una marca digital.</p>
+                    </div>
+                    <div class="card">
+                        <h3>Amplio Portafolio</h3>
+                        <p>Disponemos de múltiples dominios relacionados con Norte, Tu Norte y otras variantes.</p>
+                    </div>
+                    <div class="card">
+                        <h3>Oportunidad de Inversión</h3>
+                        <p>Ideal para empresas, emprendedores o inversionistas digitales.</p>
+                    </div>
+                </div>
+
+                <button class="btn" onclick="showMessage()">Solicitar Información</button>
+                <div class="message" id="msg">
+                    Gracias por su interés. Nuestro equipo habilitará el canal de contacto próximamente.
+                </div>
+            </div>
+        </section>
+
+        <footer>
+            © 2022 PeleasDeGallosTuNorte.com · Dominio disponible para adquisición.
+        </footer>
+    </div>
+
+    <!-- ==========================================================================
+         LÓGICA INTERACTIVA (JAVASCRIPT)
+         ========================================================================== */ -->
+    <script>
+        // Función para cambiar de la pantalla de error a la Landing Page
+        function loadLanding(e) {
+            if(e) e.preventDefault();
+            
+            // Oculta la simulación de error
+            document.getElementById("error-view").style.display = "none";
+            
+            // Muestra la landing original
+            document.getElementById("landing-view").style.display = "block";
+            
+            // Actualiza dinámicamente el título del navegador
+            document.title = "PeleasDeGallosTuNorte.com | Dominio en Venta";
+        }
+
+        // Función original de la landing para mostrar el mensaje
+        function showMessage(){
+            document.getElementById("msg").style.display = "block";
+        }
+    </script>
 
 </body>
 </html>
