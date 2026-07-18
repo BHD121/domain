@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>TC Store</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css">
+<style>
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;font-family:'Inter',sans-serif}
+body{background:#fff;color:#111;overflow-x:hidden}
+
+/* HEADER */
+header{position:sticky;top:0;z-index:200;background:#fff;border-bottom:1px solid #ebebeb;height:58px;display:flex;align-items:center;justify-content:space-between;padding:0 20px}
+.logo{display:flex;align-items:center;gap:9px;font-weight:900;font-size:17px;letter-spacing:-.3px}
+.logo-icon{width:30px;height:30px;background:#000;border-radius:7px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:13px}
+.logo-sub{font-weight:400;color:#bbb}
+.hdr-right{display:flex;align-items:center;gap:16px}
+.hdr-right i{font-size:17px;cursor:pointer;color:#333}
+.cart-wrap{position:relative;cursor:pointer}
+.cart-badge{position:absolute;top:-7px;right:-9px;background:#e00;color:#fff;font-size:9px;font-weight:900;min-width:16px;height:16px;border-radius:8px;display:flex;align-items:center;justify-content:center;padding:0 4px}
+
+/* SEARCH */
+#searchbar{display:none;padding:10px 16px;border-bottom:1px solid #ebebeb;background:#fff}
+#searchbar input{width:100%;padding:9px 16px;border:1.5px solid #ddd;border-radius:50px;font-size:14px;outline:none}
+#searchbar input:focus{border-color:#000}
+
+/* HERO */
+.hero-swiper{height:200px}
+@media(min-width:600px){.hero-swiper{height:320px}}
+@media(min-width:1000px){.hero-swiper{height:440px}}
+.hero-swiper img{width:100%;height:100%;object-fit:cover;display:block}
+.swiper-button-next,.swiper-button-prev{color:#fff!important;--swiper-navigation-size:18px}
+.swiper-pagination-bullet-active{background:#000!important}
+
+/* FILTERS */
+.filters{padding:18px 16px 8px;max-width:1200px;margin:0 auto}
+.filter-label{font-size:9px;font-weight:900;color:#bbb;letter-spacing:2px;display:block;margin-bottom:10px;text-transform:uppercase}
+.cats{display:flex;gap:7px;overflow-x:auto;scrollbar-width:none;padding-bottom:2px}
+.cats::-webkit-scrollbar{display:none}
+.cat{padding:8px 16px;border:none;border-radius:50px;font-size:11px;font-weight:800;cursor:pointer;background:#f2f2f2;color:#666;white-space:nowrap;transition:.15s}
+.cat.active{background:#000;color:#fff}
+
+/* GRID */
+#grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;padding:16px 12px 100px;max-width:1200px;margin:0 auto}
+@media(min-width:560px){#grid{grid-template-columns:repeat(3,1fr);gap:16px}}
+@media(min-width:850px){#grid{grid-template-columns:repeat(4,1fr);gap:20px;padding:16px 20px 100px}}
+@media(min-width:1100px){#grid{grid-template-columns:repeat(5,1fr)}}
+.pcard{cursor:pointer;transition:transform .2s}
+.pcard:hover{transform:translateY(-3px)}
+.pcard-img{aspect-ratio:1/1;border-radius:16px;overflow:hidden;background:#f4f4f4;margin-bottom:9px}
+.pcard-img img{width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity .35s}
+.pcard-img img.vis{opacity:1}
+.pcard-cat{font-size:9px;color:#bbb;font-weight:700;letter-spacing:.5px;text-transform:uppercase;margin-bottom:3px}
+.pcard-name{font-size:12px;font-weight:800;line-height:1.3;margin-bottom:7px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;height:31px}
+.pcard-foot{display:flex;align-items:center;justify-content:space-between}
+.pcard-price{font-size:14px;font-weight:900}
+.add-btn{width:28px;height:28px;border-radius:50%;background:#000;border:none;color:#fff;font-size:12px;cursor:pointer;display:flex;align-items:center;justify-content:center}
+.empty{grid-column:1/-1;text-align:center;padding:80px 20px;color:#ccc}
+.empty i{font-size:44px;display:block;margin-bottom:14px}
+
+/* DETAIL MODAL - full screen overlay */
+#detail{
+  position:fixed;inset:0;z-index:500;
+  background:#fff;
+  transform:translateY(100%);
+  transition:transform .38s cubic-bezier(.16,1,.3,1);
+  display:flex;
+  flex-direction:column;
+  overflow:hidden;
+}
+#detail.open{transform:translateY(0)}
+
+/* detail top bar */
+.dbar{
+  flex-shrink:0;
+  height:52px;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 16px;
+  border-bottom:1px solid #ebebeb;
+  background:#fff;
+  z-index:10;
+}
+.dbar-back{background:none;border:none;font-size:22px;cursor:pointer;color:#000;display:flex;align-items:center}
+.dbar-title{font-size:10px;font-weight:900;letter-spacing:2px;color:#000}
+
+/* detail body scrollable */
+.dbody{
+  flex:1;
+  overflow-y:auto;
+  -webkit-overflow-scrolling:touch;
+}
+
+/* On desktop: two column inside dbody */
+.dlayout{
+  display:block;
+}
+@media(min-width:800px){
+  .dbody{overflow:hidden;display:flex;flex-direction:column}
+  .dlayout{
+    flex:1;
+    overflow:hidden;
+    display:grid;
+    grid-template-columns:1fr 1fr;
+  }
+}
+
+/* LEFT: image area */
+.dleft{
+  background:#f5f5f5;
+  display:flex;
+  flex-direction:column;
+}
+@media(min-width:800px){
+  .dleft{height:100%;overflow:hidden}
+}
+
+/* main image */
+.dmain-img{
+  flex:1;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  overflow:hidden;
+  background:#f5f5f5;
+  min-height:260px;
+  max-height:360px;
+}
+@media(min-width:800px){
+  .dmain-img{max-height:none;min-height:0}
+}
+.dmain-img img{
+  width:100%;
+  height:100%;
+  object-fit:contain;
+  transition:opacity .2s;
+}
+
+/* thumbnails */
+.dthumbs{
+  display:flex;
+  gap:8px;
+  padding:10px 14px;
+  overflow-x:auto;
+  background:#fff;
+  border-top:1px solid #ebebeb;
+  scrollbar-width:none;
+  flex-shrink:0;
+}
+.dthumbs::-webkit-scrollbar{display:none}
+.dthumb{
+  width:56px;height:56px;
+  border-radius:10px;
+  object-fit:cover;
+  cursor:pointer;
+  border:2px solid transparent;
+  background:#eee;
+  flex-shrink:0;
+  transition:.15s;
+}
+.dthumb.on{border-color:#000}
+
+/* RIGHT: info panel */
+.dright{
+  padding:22px 18px 60px;
+  overflow-y:auto;
+  -webkit-overflow-scrolling:touch;
+  background:#fff;
+}
+@media(min-width:800px){
+  .dright{padding:28px 36px 40px;height:100%}
+}
+
+/* info elements */
+.d-breadcrumb{font-size:10px;color:#bbb;margin-bottom:10px}
+.d-breadcrumb b{color:#000}
+.d-name{font-size:20px;font-weight:900;line-height:1.2;margin-bottom:8px;color:#111}
+.d-stars{display:flex;align-items:center;gap:6px;margin-bottom:14px}
+.d-stars span{color:#f5a623;font-size:13px}
+.d-stars small{font-size:11px;color:#0066c0;cursor:pointer}
+.d-pricebox{background:#f8f8f8;border:1px solid #ebebeb;border-radius:12px;padding:14px 16px;margin-bottom:14px}
+.d-pricelabel{font-size:10px;color:#aaa;margin-bottom:3px}
+.d-price{font-size:28px;font-weight:900;color:#111}
+.d-pricenote{font-size:11px;color:#bbb;margin-top:3px}
+.d-stock{display:inline-flex;align-items:center;gap:5px;background:#eaf6eb;color:#1a7a2e;font-size:11px;font-weight:800;padding:5px 12px;border-radius:6px;margin-bottom:16px}
+.d-actions{display:flex;flex-direction:column;gap:10px;margin-bottom:22px}
+#paypal-container-MZQ9LGD2V5WAG{width:100%}
+.d-addcart{
+  width:100%;padding:14px;
+  background:#fff;color:#111;
+  border:1.5px solid #ccc;border-radius:10px;
+  font-weight:800;font-size:13px;cursor:pointer;
+  transition:.15s;
+}
+.d-addcart:hover{background:#f5f5f5;border-color:#999}
+.d-sectiontitle{font-size:10px;font-weight:900;color:#aaa;letter-spacing:1.5px;margin-bottom:9px;padding-bottom:7px;border-bottom:1px solid #f0f0f0;text-transform:uppercase}
+.d-desc{font-size:13px;color:#555;line-height:1.75;margin-bottom:20px}
+.d-feats{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.d-feat{font-size:11px;font-weight:600;color:#333;display:flex;align-items:center;gap:6px;padding:9px 10px;background:#fafafa;border-radius:9px;border:1px solid #eee}
+.d-feat i{color:#000;font-size:13px}
+
+/* CART */
+#cartmodal{position:fixed;inset:0;z-index:600;display:none}
+.cart-bg{position:absolute;inset:0;background:rgba(0,0,0,.4)}
+.cart-panel{position:absolute;right:0;top:0;bottom:0;width:320px;max-width:86%;background:#fff;display:flex;flex-direction:column}
+.cart-top{padding:20px 18px;border-bottom:1px solid #ebebeb;display:flex;justify-content:space-between;align-items:center}
+.cart-top h2{font-size:13px;font-weight:900;letter-spacing:1px}
+.cart-top button{background:none;border:none;font-size:19px;cursor:pointer}
+.cart-list{flex:1;overflow-y:auto;padding:14px 18px}
+.cart-bot{padding:18px;border-top:1px solid #ebebeb;background:#fafafa}
+.cart-total-row{display:flex;justify-content:space-between;font-weight:900;font-size:14px;margin-bottom:14px}
+.cart-checkout{width:100%;background:#000;color:#fff;border:none;padding:16px;border-radius:12px;font-weight:900;font-size:13px;cursor:pointer}
+.citem{display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid #f4f4f4}
+.citem img{width:52px;height:52px;object-fit:cover;border-radius:9px;background:#f4f4f4;flex-shrink:0}
+.citem-info{flex:1;min-width:0}
+.citem-name{font-size:12px;font-weight:800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.citem-cat{font-size:10px;color:#bbb;margin:2px 0}
+.citem-price{font-size:13px;font-weight:900}
+.citem-qty{display:flex;align-items:center;gap:5px;flex-shrink:0}
+.qbtn{width:24px;height:24px;border-radius:50%;border:1px solid #ddd;background:#fff;font-size:13px;cursor:pointer;display:flex;align-items:center;justify-content:center}
+.qbtn.plus{background:#000;color:#fff;border-color:#000}
+.qnum{font-size:12px;font-weight:700;min-width:14px;text-align:center}
+.cart-empty{text-align:center;padding:50px 0;color:#ccc}
+.cart-empty i{font-size:38px;display:block;margin-bottom:12px}
+
+/* TOAST */
+#toast{position:fixed;bottom:80px;left:50%;transform:translateX(-50%) translateY(8px);background:rgba(0,0,0,.82);color:#fff;padding:10px 20px;border-radius:50px;font-size:12px;font-weight:700;z-index:9999;opacity:0;transition:.22s;pointer-events:none;white-space:nowrap}
+#toast.on{opacity:1;transform:translateX(-50%) translateY(0)}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">
+    <div class="logo-icon"><i class="fa fa-shopping-bag"></i></div>
+    TC <span class="logo-sub">STORE</span>
+  </div>
+  <div class="hdr-right">
+    <i class="fa fa-search" onclick="toggleSearch()"></i>
+    <div class="cart-wrap" onclick="openCart()">
+      <i class="fa fa-shopping-bag"></i>
+      <span class="cart-badge" id="badge">0</span>
+    </div>
+  </div>
+</header>
+
+<div id="searchbar">
+  <input type="text" placeholder="¿Qué estás buscando?" oninput="doSearch(this.value)">
+</div>
+
+<div class="swiper hero-swiper" id="hero">
+  <div class="swiper-wrapper">
+    <div class="swiper-slide"><img src="https://images.unsplash.com/photo-1441984904996-e0b6ba687e04?w=1400&q=80" alt=""></div>
+    <div class="swiper-slide"><img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=1400&q=80" alt=""></div>
+    <div class="swiper-slide"><img src="https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=1400&q=80" alt=""></div>
+    <div class="swiper-slide"><img src="https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=1400&q=80" alt=""></div>
+  </div>
+  <div class="swiper-pagination"></div>
+  <div class="swiper-button-next"></div>
+  <div class="swiper-button-prev"></div>
+</div>
+
+<div class="filters">
+  <span class="filter-label">Categorías</span>
+  <div class="cats" id="cats"></div>
+</div>
+
+<div id="grid"></div>
+
+<div id="toast"></div>
+
+<!-- DETAIL MODAL -->
+<div id="detail">
+  <div class="dbar">
+    <button class="dbar-back" onclick="closeDetail()"><i class="fa fa-angle-left"></i></button>
+    <span class="dbar-title">DETALLE</span>
+    <div style="width:32px"></div>
+  </div>
+  <div class="dbody">
+    <div class="dlayout" id="dlayout"></div>
+  </div>
+</div>
+
+<!-- CART -->
+<div id="cartmodal">
+  <div class="cart-bg" onclick="closeCart()"></div>
+  <div class="cart-panel">
+    <div class="cart-top">
+      <h2>MI BOLSA</h2>
+      <button onclick="closeCart()"><i class="fa fa-times"></i></button>
+    </div>
+    <div class="cart-list" id="cartlist"></div>
+    <div class="cart-bot">
+      <div class="cart-total-row"><span>TOTAL</span><span id="carttotal">$0.00</span></div>
+      <button class="cart-checkout" onclick="checkout()">FINALIZAR PEDIDO</button>
+    </div>
+  </div>
+</div>
+
+<script src="https://www.paypal.com/sdk/js?client-id=BAA2oJQerU20Cw-dmkpQKr32srHxkCsNFKvbFGrDiTvKijpgT956bJl1utyAiLuEFpzyHthhy7v_8-q4IY&components=hosted-buttons&disable-funding=venmo&currency=USD"></script>
+<script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+<script>
+const PRODUCTS = [
+  { id:1, name:"Curren Silver Elite", price:0.01, cat:"Relojes",
+    desc:"Reloj de acero inoxidable con esfera plateada y cristal mineral. Diseño elegante para cualquier ocasión.",
+    img:"https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=800&q=80",
+    images:["https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=800&q=80","https://images.unsplash.com/photo-1524592094714-0f0654e20314?w=800&q=80"] },
+  { id:2, name:"Nike Air Max 270 Crimson", price:180, cat:"Calzado",
+    desc:"Amortiguación de aire visible en el talón para máxima comodidad durante todo el día.",
+    img:"https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=800&q=80",
+    images:["https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=800&q=80","https://images.unsplash.com/photo-1549298916-b41d501d3772?w=800&q=80"] },
+  { id:3, name:"Apple Watch Ultra 2", price:799, cat:"Relojes",
+    desc:"Titanio aeroespacial con GPS de doble frecuencia. El smartwatch más resistente de Apple.",
+    img:"https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=800&q=80",
+    images:["https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=800&q=80"] },
+  { id:4, name:"Dior Sauvage Elixir", price:165, cat:"Perfumes",
+    desc:"Fragancia intensa y magnética con notas amaderadas y especiadas. Edición de lujo.",
+    img:"https://images.unsplash.com/photo-1541643600914-78b084683601?w=800&q=80",
+    images:["https://images.unsplash.com/photo-1541643600914-78b084683601?w=800&q=80"] },
+  { id:5, name:"Camiseta Premium Cotton", price:45, cat:"Ropa",
+    desc:"100% algodón pima. Corte moderno y costuras reforzadas para mayor durabilidad.",
+    img:"https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=800&q=80",
+    images:["https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=800&q=80"] },
+  { id:6, name:"Curren Black Slate", price:95, cat:"Relojes",
+    desc:"Elegancia masculina con esfera minimalista y correa de acero. Resistente al agua.",
+    img:"https://images.unsplash.com/photo-1524805444758-09912d786b53?w=800&q=80",
+    images:["https://images.unsplash.com/photo-1524805444758-09912d786b53?w=800&q=80"] },
+  { id:7, name:"Gafas Ray-Ban Aviator", price:155, cat:"Accesorios",
+    desc:"Montura dorada con cristal verde G-15. El clásico atemporal de la moda americana.",
+    img:"https://images.unsplash.com/photo-1572635196237-14b3f281503f?w=800&q=80",
+    images:["https://images.unsplash.com/photo-1572635196237-14b3f281503f?w=800&q=80"] },
+  { id:8, name:"Mochila Tactical Negro", price:79, cat:"Accesorios",
+    desc:"40L de capacidad con compartimentos organizados y correas acolchadas anti-fatiga.",
+    img:"https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=800&q=80",
+    images:["https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=800&q=80"] }
+];
+
+const CATS = ['Todos', ...new Set(PRODUCTS.map(p => p.cat))];
+let cart = JSON.parse(localStorage.getItem('tc_cart')||'[]');
+let activeCat = 'Todos';
+let searchQ = '';
+let detailOpen = false;
+
+// ── INIT ──
+document.addEventListener('DOMContentLoaded', () => {
+  renderCats(); renderGrid(); updateBadge();
+  new Swiper('#hero', {
+    loop:true, speed:700,
+    autoplay:{delay:4500,disableOnInteraction:false},
+    pagination:{el:'.swiper-pagination',clickable:true},
+    navigation:{nextEl:'.swiper-button-next',prevEl:'.swiper-button-prev'}
+  });
+});
+
+// ── CATEGORIES ──
+function renderCats() {
+  document.getElementById('cats').innerHTML = CATS.map(c =>
+    `<button class="cat${c===activeCat?' active':''}" onclick="setCat('${c}')">${c}</button>`
+  ).join('');
+}
+function setCat(c){ activeCat=c; renderCats(); renderGrid(); }
+
+// ── GRID ──
+function renderGrid() {
+  const q = searchQ.toLowerCase();
+  const list = PRODUCTS.filter(p => {
+    const mc = activeCat==='Todos' || p.cat===activeCat;
+    const mq = !q || p.name.toLowerCase().includes(q) || p.cat.toLowerCase().includes(q);
+    return mc && mq;
+  });
+  const grid = document.getElementById('grid');
+  if (!list.length) {
+    grid.innerHTML = `<div class="empty"><i class="fa fa-search"></i><p>Sin resultados</p></div>`;
+    return;
+  }
+  grid.innerHTML = list.map(p => `
+    <div class="pcard" onclick="openDetail(${p.id})">
+      <div class="pcard-img">
+        <img src="${p.img}" alt="${p.name}" onload="this.classList.add('vis')" onerror="this.src='https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=400'">
+      </div>
+      <div class="pcard-cat">${p.cat}</div>
+      <div class="pcard-name">${p.name}</div>
+      <div class="pcard-foot">
+        <span class="pcard-price">$${p.price.toFixed(2)}</span>
+        <button class="add-btn" onclick="event.stopPropagation();addToCart(${p.id})"><i class="fa fa-plus"></i></button>
+      </div>
+    </div>`).join('');
+}
+
+// ── SEARCH ──
+function toggleSearch(){
+  const b = document.getElementById('searchbar');
+  const v = b.style.display==='block';
+  b.style.display = v?'none':'block';
+  if(!v) b.querySelector('input').focus();
+}
+function doSearch(v){ searchQ=v.trim(); renderGrid(); }
+
+// ── DETAIL ──
+function openDetail(id) {
+  const p = PRODUCTS.find(x=>x.id===id);
+  if(!p) return;
+
+  const imgs = p.images && p.images.length ? p.images : [p.img];
+
+  const thumbsHtml = imgs.length > 1 ? `
+    <div class="dthumbs">
+      ${imgs.map((img,i)=>`<img src="${img}" class="dthumb${i===0?' on':''}" onclick="switchImg('${img}',this)" alt="">`).join('')}
+    </div>` : '';
+
+  document.getElementById('dlayout').innerHTML = `
+    <div class="dleft">
+      <div class="dmain-img">
+        <img id="mainimg" src="${imgs[0]}" alt="${p.name}" onerror="this.src='https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=800'">
+      </div>
+      ${thumbsHtml}
+    </div>
+    <div class="dright">
+      <div class="d-breadcrumb">${p.cat} › <b>${p.name}</b></div>
+      <div class="d-name">${p.name}</div>
+      <div class="d-stars">
+        <span>★★★★★</span>
+        <small>128 reseñas</small>
+      </div>
+      <div class="d-pricebox">
+        <div class="d-pricelabel">Precio</div>
+        <div class="d-price">$${p.price.toFixed(2)}</div>
+        <div class="d-pricenote">USD · Impuestos incluidos</div>
+      </div>
+      <div class="d-stock"><i class="fa fa-check"></i> En Stock</div>
+      <div class="d-actions">
+        <div id="paypal-container-MZQ9LGD2V5WAG"></div>
+        <button class="d-addcart" onclick="addToCart(${p.id});toast('✓ Añadido a tu bolsa')">
+          <i class="fa fa-shopping-bag"></i> &nbsp;AÑADIR A LA BOLSA
+        </button>
+      </div>
+      <div class="d-sectiontitle">Descripción</div>
+      <div class="d-desc">${p.desc}</div>
+      <div class="d-sectiontitle">Garantías</div>
+      <div class="d-feats">
+        <div class="d-feat"><i class="fa fa-check-circle"></i> Autenticidad</div>
+        <div class="d-feat"><i class="fa fa-truck"></i> Envío Express</div>
+        <div class="d-feat"><i class="fa fa-refresh"></i> Devoluciones</div>
+        <div class="d-feat"><i class="fa fa-lock"></i> Pago Seguro</div>
+      </div>
+    </div>`;
+
+  document.getElementById('detail').classList.add('open');
+  detailOpen = true;
+
+  // Render PayPal button
+  if (window.paypal) {
+    paypal.HostedButtons({ hostedButtonId: "MZQ9LGD2V5WAG" })
+      .render("#paypal-container-MZQ9LGD2V5WAG");
+  }
+
+  window.history.pushState({modal:'detail'}, '');
+}
+
+function closeDetail(){
+  document.getElementById('detail').classList.remove('open');
+  detailOpen = false;
+  if(history.state && history.state.modal) history.back();
+}
+
+function switchImg(src, el) {
+  const img = document.getElementById('mainimg');
+  if(!img) return;
+  img.style.opacity = '0';
+  setTimeout(()=>{ img.src=src; img.style.opacity='1'; }, 180);
+  document.querySelectorAll('.dthumb').forEach(t=>t.classList.remove('on'));
+  if(el) el.classList.add('on');
+}
+
+window.onpopstate = () => {
+  if(detailOpen){ document.getElementById('detail').classList.remove('open'); detailOpen=false; }
+  closeCart();
+};
+
+// ── CART ──
+function addToCart(id){
+  const p = PRODUCTS.find(x=>x.id===id);
+  if(!p) return;
+  const ex = cart.find(i=>i.id===id);
+  if(ex) ex.qty++; else cart.push({id:p.id,name:p.name,price:p.price,img:p.img,cat:p.cat,qty:1});
+  saveCart(); toast('✓ Añadido a tu bolsa');
+}
+function changeQty(id,d){
+  const item = cart.find(i=>i.id===id);
+  if(!item) return;
+  item.qty+=d;
+  if(item.qty<=0) cart=cart.filter(i=>i.id!==id);
+  saveCart(); renderCartList();
+}
+function saveCart(){ localStorage.setItem('tc_cart',JSON.stringify(cart)); updateBadge(); }
+function updateBadge(){ document.getElementById('badge').textContent=cart.reduce((s,i)=>s+i.qty,0); }
+
+function openCart(){ renderCartList(); document.getElementById('cartmodal').style.display='block'; }
+function closeCart(){ document.getElementById('cartmodal').style.display='none'; }
+
+function renderCartList(){
+  const total = cart.reduce((s,i)=>s+i.price*i.qty,0);
+  document.getElementById('carttotal').textContent=`$${total.toFixed(2)}`;
+  const el = document.getElementById('cartlist');
+  if(!cart.length){
+    el.innerHTML=`<div class="cart-empty"><i class="fa fa-shopping-bag"></i><p>Tu bolsa está vacía</p></div>`;
+    return;
+  }
+  el.innerHTML = cart.map(item=>`
+    <div class="citem">
+      <img src="${item.img}" alt="${item.name}" onerror="this.src='https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=200'">
+      <div class="citem-info">
+        <div class="citem-name">${item.name}</div>
+        <div class="citem-cat">${item.cat}</div>
+        <div class="citem-price">$${(item.price*item.qty).toFixed(2)}</div>
+      </div>
+      <div class="citem-qty">
+        <button class="qbtn" onclick="changeQty(${item.id},-1)">−</button>
+        <span class="qnum">${item.qty}</span>
+        <button class="qbtn plus" onclick="changeQty(${item.id},1)">+</button>
+      </div>
+    </div>`).join('');
+}
+
+function checkout(){
+  if(!cart.length){ toast('Tu bolsa está vacía'); return; }
+  closeCart();
+  toast('Abre un producto y usa el botón PayPal para pagar');
+}
+
+// ── TOAST ──
+let tt;
+function toast(msg){
+  const el=document.getElementById('toast');
+  el.textContent=msg; el.classList.add('on');
+  clearTimeout(tt); tt=setTimeout(()=>el.classList.remove('on'),2500);
+}
+</script>
+</body>
+</html>
