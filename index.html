@@ -29,33 +29,41 @@
             padding: 20px;
         }
 
-        .interstitial-wrapper {
+        .err-wrapper {
             max-width: 600px;
             width: 100%;
             padding-bottom: 80px;
         }
 
-        .icon {
+        .err-icon {
             display: block;
             height: 40px; 
             width: 40px;  
             margin-bottom: 32px; 
             opacity: 0.75; 
             object-fit: contain;
-        }
-
-        .icon-generic {
             content: url("https://i.postimg.cc/ZvxcWpXQ/image.png");
         }
 
-        #main-message h1 {
+        .err-title {
             font-size: 22px;
             font-weight: 500;
             margin-bottom: 24px;
             color: #e8eaed;
         }
 
-        #main-message p, .single-suggestion li {
+        .err-text {
+            font-size: 14px;
+            line-height: 22px;
+            color: #9aa0a6;
+            margin-bottom: 16px;
+        }
+
+        .err-text span {
+            color: #e8eaed;
+        }
+
+        .err-list {
             font-size: 14px;
             line-height: 22px;
             color: #9aa0a6;
@@ -63,31 +71,27 @@
             list-style-type: none;
         }
 
-        #main-message p span {
-            color: #e8eaed;
-        }
-
-        #diagnose-link {
+        .err-link {
             color: #8ab4f8;
             text-decoration: none;
         }
 
-        #diagnose-link:hover {
+        .err-link:hover {
             text-decoration: underline;
         }
 
-        .error-code {
+        .err-code {
             font-size: 11px;
             color: #9aa0a6;
             margin-top: 28px;
             text-transform: uppercase;
         }
 
-        .nav-wrapper {
+        .err-nav {
             margin-top: 40px;
         }
 
-        .blue-button {
+        .err-btn {
             background-color: #8ab4f8;
             color: #202124;
             font-size: 14px;
@@ -99,19 +103,19 @@
             transition: background-color 0.1s;
         }
 
-        .blue-button:hover {
+        .err-btn:hover {
             background-color: #93baf9;
         }
 
-        .blue-button:active {
+        .err-btn:active {
             background-color: #abc7f9;
         }
 
         /* ==========================================================================
-           VISTA 2: LANDING PAGE DOMINIO EN VENTA
+           VISTA 2: LANDING PAGE DOMINIO EN VENTA (AISLADA Y RESPONSIVA)
            ========================================================================== */
         #landing-view {
-            display: none; /* Oculta por defecto */
+            display: none; 
             background: #0f0f0f;
             color: white;
             font-family: 'Inter', sans-serif;
@@ -119,24 +123,26 @@
             min-height: 100vh;
         }
 
-        .hero {
+        .ld-hero {
             min-height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
-            padding: 40px;
+            padding: 60px 20px;
             background: linear-gradient(rgba(0,0,0,.70),rgba(0,0,0,.80)),
                         url('https://images.unsplash.com/photo-1517849845537-4d257902454a?q=80&w=2070');
             background-size: cover;
-            background-position:center;
+            background-position: center;
         }
 
-        .container {
+        .ld-container {
             max-width: 1100px;
+            width: 100%;
             text-align: center;
+            margin: 0 auto;
         }
 
-        .badge {
+        .ld-badge {
             display: inline-block;
             background: rgba(255,255,255,.08);
             border: 1px solid rgba(255,255,255,.15);
@@ -144,58 +150,63 @@
             border-radius: 50px;
             margin-bottom: 25px;
             backdrop-filter: blur(10px);
+            font-size: 14px;
         }
 
-        h2 {
-            font-size: clamp(45px,7vw,85px);
+        .ld-main-title {
+            font-size: clamp(34px, 6vw, 85px);
             font-weight: 800;
-            line-height: 1;
+            line-height: 1.1;
             margin-bottom: 25px;
+            word-wrap: break-word;
         }
 
-        .domain {
+        .ld-domain {
             color: #d6a75f;
         }
 
-        .landing-p {
+        .ld-description {
             color: #cfcfcf;
-            font-size: 20px;
+            font-size: clamp(16px, 2vw, 20px);
             line-height: 1.8;
             max-width: 850px;
-            margin: auto;
+            margin: 0 auto 40px auto;
         }
 
-        .features {
+        .ld-features {
             display: grid;
-            grid-template-columns: repeat(auto-fit,minmax(250px,1fr));
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
             gap: 25px;
-            margin-top: 70px;
+            margin-top: 50px;
         }
 
-        .card {
+        .ld-card {
             background: rgba(255,255,255,.05);
             border: 1px solid rgba(255,255,255,.08);
-            padding: 35px;
+            padding: 35px 25px;
             border-radius: 25px;
             backdrop-filter: blur(15px);
             transition: .3s;
+            text-align: center;
         }
 
-        .card:hover {
+        .ld-card:hover {
             transform: translateY(-8px);
         }
 
-        .card h3 {
+        .ld-card h3 {
             margin-bottom: 15px;
             color: #fff;
+            font-size: 20px;
         }
 
-        .card p {
-            font-size: 16px;
+        .ld-card p {
+            font-size: 15px;
             color: #cfcfcf;
+            line-height: 1.6;
         }
 
-        .btn {
+        .ld-btn {
             margin-top: 55px;
             padding: 18px 45px;
             border: none;
@@ -206,29 +217,42 @@
             font-weight: 700;
             cursor: pointer;
             transition: .3s;
+            width: auto;
         }
 
-        .btn:hover {
+        .ld-btn:hover {
             transform: scale(1.05);
         }
 
-        .message {
+        .ld-message {
             margin-top: 25px;
             color: #d6a75f;
             display: none;
             font-size: 17px;
+            padding: 0 10px;
         }
 
-        footer {
+        .ld-footer {
             text-align: center;
-            padding: 35px;
+            padding: 35px 20px;
             color: #777;
             background: #090909;
+            font-size: 14px;
+            line-height: 1.5;
         }
 
-        @media(max-width:768px){
-            .landing-p {
-                font-size: 18px;
+        /* Ajustes específicos para pantallas móviles muy pequeñas */
+        @media (max-width: 480px) {
+            .ld-hero {
+                padding: 40px 15px;
+            }
+            .ld-card {
+                padding: 25px 20px;
+            }
+            .ld-btn {
+                width: 100%;
+                max-width: 300px;
+                padding: 15px 20px;
             }
         }
     </style>
@@ -237,47 +261,42 @@
 
     <!-- ==========================================================================
          VISTA 1: ERROR DE RED DE CHROMIUM
-         ========================================================================== */ -->
+         ========================================================================== -->
     <div id="error-view">
-        <div id="main-frame-error" class="interstitial-wrapper">
-            <div id="main-content">
-                <div class="icon icon-generic"></div>
+        <div class="err-wrapper">
+            <div class="err-icon"></div>
+            
+            <div id="main-message">
+                <h1 class="err-title"><span>No se puede acceder a este sitio</span></h1>
+                <p class="err-text">Revisa que no haya errores de ortografía en <span>peleasdegallostunorte.com</span>.</p>
                 
-                <div id="main-message">
-                    <h1><span>No se puede acceder a este sitio</span></h1>
-                    <p>Revisa que no haya errores de ortografía en <span>peleasdegallostunorte.com</span>.</p>
-                    
-                    <div id="suggestions-list">
-                        <ul class="single-suggestion">
-                            <li>Si no hay errores, <a href="#" id="diagnose-link" onclick="loadLanding(event)">prueba ejecutar el diagnóstico de red de Windows</a>.</li>
-                        </ul>
-                    </div>
-                    <div class="error-code">DNS_PROBE_FINISHED_NXDOMAIN</div>
+                <div>
+                    <ul class="err-list">
+                        <li>Si no hay errores, <a href="#" class="err-link" onclick="loadLanding(event)">prueba ejecutar el diagnóstico de red de Windows</a>.</li>
+                    </ul>
                 </div>
+                <div class="err-code">DNS_PROBE_FINISHED_NXDOMAIN</div>
             </div>
             
-            <div id="buttons" class="nav-wrapper suggested-left">
-                <div id="control-buttons">
-                    <!-- Redirección controlada por JS -->
-                    <button id="reload-button" class="blue-button text-button" onclick="loadLanding(event)">
-                        Volver a cargar
-                    </button>
-                </div>
+            <div class="err-nav">
+                <button class="err-btn" onclick="loadLanding(event)">
+                    Volver a cargar
+                </button>
             </div>
         </div>
     </div>
 
     <!-- ==========================================================================
          VISTA 2: LANDING PAGE DOMINIO EN VENTA
-         ========================================================================== */ -->
+         ========================================================================== -->
     <div id="landing-view">
-        <section class="hero">
-            <div class="container">
-                <div class="badge">🌐 Dominio Premium Disponible</div>
+        <section class="ld-hero">
+            <div class="ld-container">
+                <div class="ld-badge">🌐 Dominio Premium Disponible</div>
 
-                <h2><span class="domain">PeleasDeGallosTuNorte.com</span></h2>
+                <h2 class="ld-main-title"><span class="ld-domain">PeleasDeGallosTuNorte.com</span></h2>
 
-                <p class="landing-p">
+                <p class="ld-description">
                     Tenemos disponible este valioso dominio premium, ideal para proyectos
                     digitales, marcas, portales informativos, negocios en línea o cualquier
                     iniciativa que busque una presencia sólida y fácil de recordar en internet.
@@ -291,52 +310,49 @@
                     información y descubrir nuevas oportunidades para tu próximo proyecto digital.
                 </p>
 
-                <div class="features">
-                    <div class="card">
+                <div class="ld-features">
+                    <div class="ld-card">
                         <h3>Dominio Premium</h3>
                         <p>Nombre memorable y con gran potencial para desarrollar una marca digital.</p>
                     </div>
-                    <div class="card">
+                    <div class="ld-card">
                         <h3>Amplio Portafolio</h3>
                         <p>Disponemos de múltiples dominios relacionados con Norte, Tu Norte y otras variantes.</p>
                     </div>
-                    <div class="card">
+                    <div class="ld-card">
                         <h3>Oportunidad de Inversión</h3>
                         <p>Ideal para empresas, emprendedores o inversionistas digitales.</p>
                     </div>
                 </div>
 
-                <button class="btn" onclick="showMessage()">Solicitar Información</button>
-                <div class="message" id="msg">
+                <button class="ld-btn" onclick="showMessage()">Solicitar Información</button>
+                <div class="ld-message" id="msg">
                     Gracias por su interés. Nuestro equipo habilitará el canal de contacto próximamente.
                 </div>
             </div>
         </section>
 
-        <footer>
+        <footer class="ld-footer">
             © 2022 PeleasDeGallosTuNorte.com · Dominio disponible para adquisición.
         </footer>
     </div>
 
     <!-- ==========================================================================
          LÓGICA INTERACTIVA (JAVASCRIPT)
-         ========================================================================== */ -->
+         ========================================================================== -->
     <script>
-        // Función para cambiar de la pantalla de error a la Landing Page
         function loadLanding(e) {
             if(e) e.preventDefault();
             
-            // Oculta la simulación de error
+            // Ocultar error y mostrar landing
             document.getElementById("error-view").style.display = "none";
-            
-            // Muestra la landing original
             document.getElementById("landing-view").style.display = "block";
             
-            // Actualiza dinámicamente el título del navegador
+            // Forzar actualización de layout responsive y título
+            window.scrollTo(0, 0);
             document.title = "PeleasDeGallosTuNorte.com | Dominio en Venta";
         }
 
-        // Función original de la landing para mostrar el mensaje
         function showMessage(){
             document.getElementById("msg").style.display = "block";
         }
